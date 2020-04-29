@@ -30,4 +30,4 @@ jobs:
       with:
         files: 'builds/laradock-cli'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        release-tag: ${{ steps.get_tag.outputs.VERSION }}
+        release-tag: ${GITHUB_REF}
