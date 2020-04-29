@@ -2,7 +2,9 @@
 
 use Eppak\Commands\CheckCommand;
 use Eppak\Commands\InitCommand;
+use Eppak\Commands\MySqlCommand;
 use Eppak\Commands\StartCommand;
+use Eppak\Commands\StopCommand;
 use Eppak\Commands\WorkspaceCommand;
 
 return [
@@ -48,7 +50,9 @@ return [
         InitCommand::class,
         CheckCommand::class,
         StartCommand::class,
-        WorkspaceCommand::class
+        StopCommand::class,
+        WorkspaceCommand::class,
+        MySqlCommand::class
     ],
 
     /*

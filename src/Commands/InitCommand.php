@@ -41,15 +41,11 @@ class InitCommand extends Command
      */
     public function handle(Git $git, Env $env)
     {
-        $path = $this->option('path');
+        $path = $this->path();
         $force = $this->option('force');
 
         $done = $this->runTask("Cloning to {$path}...", $git, function () use ($git, $path, $force) {
-            if ($git->clone($path, $force)) {
-                return true;
-            }
-
-            return false;
+            return $git->clone($path, $force);
         });
 
         if (!$done) {
@@ -57,12 +53,7 @@ class InitCommand extends Command
         }
 
         $this->runTask("Env...", $env, function () use ($env, $path, $force) {
-
-            if($env->configure($path)) {
-                return true;
-            }
-
-            return false;
+            return $env->configure($path);
         });
 
         return 0;

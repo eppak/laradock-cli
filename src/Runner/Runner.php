@@ -14,10 +14,22 @@ use Eppak\Contracts\Runner as RunnerInterface;
  */
 class Runner implements RunnerInterface
 {
+    /**
+     * @var bool
+     */
     private $useTty = false;
+    /**
+     * @var null
+     */
     private $path = null;
+    /**
+     * @var int
+     */
     private $timeout = 60;
 
+    /**
+     * @return $this|RunnerInterface
+     */
     public function tty(): RunnerInterface
     {
         $this->useTty = true;
@@ -25,6 +37,11 @@ class Runner implements RunnerInterface
         return $this;
     }
 
+    /**
+     * @param string $path
+     * @return $this|RunnerInterface
+     * @throws PathNotFoundException
+     */
     public function from(string $path): RunnerInterface
     {
         $this->path = $path;
@@ -36,41 +53,53 @@ class Runner implements RunnerInterface
         return $this;
     }
 
+    /**
+     * @param int|null $timeout
+     * @return $this|RunnerInterface
+     */
+    public function timeout(?int $timeout): RunnerInterface
+    {
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    /**
+     * @param array $command
+     * @return RunnerResult
+     */
     public function run(array $command): RunnerResult
     {
         $process = new Process($command, $this->path);
 
-        //$process->disableOutput();
         $process->setTimeout($this->timeout);
 
-        if ($this->tty()) {
+        if ($this->useTty) {
             $process->setTty(true);
         }
 
         try {
             $process->mustRun();
 
-            return new Response(
-                $process->isSuccessful(),
-                $process->getOutput(),
-                $process->getExitCode(),
-                $process->getErrorOutput()
-            );
+            return $this->response($process->isSuccessful(), $process);
 
         } catch (ProcessFailedException $exception) {
-            return new Response(
-                false,
-                $process->getOutput(),
-                $process->getExitCode(),
-                $process->getErrorOutput()
-            );
+            return $this->response(false, $process);
         }
     }
 
-    public function timeout(?int $timeout): RunnerInterface
+    /**
+     * @param bool $status
+     * @param Process $process
+     * @return Response
+     */
+    private function response(bool $status, Process $process): Response
     {
-        $this->timeout = $timeout;
-
-        return $this;
+        return new Response(
+            $status,
+            $process->getOutput(),
+            $process->getExitCode(),
+            $process->getErrorOutput()
+        );
     }
 }

@@ -1,6 +1,7 @@
 <?php namespace Eppak\Commands;
 
 use Eppak\Contracts\Runnable;
+use Illuminate\Support\Str;
 
 /**
  * (c) Alessandro Cappellozza <alessandro.cappellozza@gmail.com>
@@ -10,6 +11,12 @@ use Eppak\Contracts\Runnable;
 
 trait Runner
 {
+    /**
+     * @param string $title
+     * @param Runnable $runner
+     * @param $function
+     * @return bool
+     */
     private function runTask(string $title, Runnable $runner, $function): bool
     {
         $done = $this->task($title, $function);
@@ -19,5 +26,20 @@ trait Runner
         }
 
         return $done;
+    }
+
+    private function path()
+    {
+        $path = $this->option('path');
+
+        if ($path == null) {
+            $path = getcwd();
+        }
+
+        if (!Str::endsWith($path, '/')) {
+            //$path = "{$path}/";
+        }
+
+        return $path;
     }
 }

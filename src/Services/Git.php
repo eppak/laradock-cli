@@ -27,12 +27,13 @@ class Git implements Runnable
     {
         $folder = "{$path}/{$this->configuration->folder()}";
 
-        if (!File::exists($path)) {
-            throw new PathNotFoundException($path);
-        }
-
         if ($force && File::exists($folder)) {
             File::deleteDirectories($folder);
+            File::deleteDirectory($folder, false);
+        }
+
+        if (!File::exists($path)) {
+            throw new PathNotFoundException($path);
         }
 
         $this->result = $this->runner->from($path)->run([

@@ -5,7 +5,7 @@ use Eppak\Runner\Runner as Run;
 use Eppak\Services\Configuration;
 use LaravelZero\Framework\Commands\Command;
 
-class WorkspaceCommand extends Command
+class MySqlCommand extends Command
 {
     use Runner;
 
@@ -14,14 +14,14 @@ class WorkspaceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'workspace {--path=}';
+    protected $signature = 'mysql {--path=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Login in workspace';
+    protected $description = 'Mysql workspace';
 
     /**
      * Create a new command instance.
@@ -49,7 +49,7 @@ class WorkspaceCommand extends Command
         $runner->tty()->timeout(null)->from($folder)->run([
             'docker-compose',
             'exec',
-            'workspace',
+            'mysql',
             'bash'
         ]);
 

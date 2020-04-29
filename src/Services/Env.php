@@ -28,7 +28,7 @@ class Env implements Runnable
 
     public function configure($path): bool
     {
-        $env = "{$path}/{$this->configuration->folder()}.env";
+        $env = "{$path}/{$this->configuration->folder()}/.env";
         $envExample = "{$path}/{$this->configuration->folder()}/env-example";
 
         try {

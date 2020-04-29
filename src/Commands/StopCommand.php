@@ -3,7 +3,7 @@
 use Eppak\Services\Docker;
 use LaravelZero\Framework\Commands\Command;
 
-class StartCommand extends Command
+class StopCommand extends Command
 {
     use Runner;
 
@@ -12,14 +12,14 @@ class StartCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'start {--path=}';
+    protected $signature = 'stop {--path=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Start Laradock';
+    protected $description = 'Stop Laradock';
 
     /**
      * Create a new command instance.
@@ -41,8 +41,8 @@ class StartCommand extends Command
     {
         $path = $this->path();
 
-        $this->runTask("Starting Docker...", $docker, function () use ($docker, $path) {
-            return $docker->start($path);
+        $this->runTask("Stopping Docker...", $docker, function () use ($docker, $path) {
+            return $docker->stop($path);
         });
 
         return 0;
