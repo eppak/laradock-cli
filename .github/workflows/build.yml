@@ -28,6 +28,6 @@ jobs:
 
     - uses: AButler/upload-release-assets@v2.0
       with:
-        files: 'builds/laradock-cli'
+        files: '/home/runner/work/laradock-cli/laradock-cli/builds/laradock-cli'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         release-tag: ${GITHUB_REF}
