@@ -29,4 +29,4 @@ jobs:
     - uses: AButler/upload-release-assets@v2.0
       with:
         files: 'builds/laradock-cli'
-        repo-token: ${{ steps.get_tag.outputs.VERSION }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
