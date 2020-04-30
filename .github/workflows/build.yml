@@ -19,15 +19,15 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     
-    - name: Get the version
+    - name: Get the tag
       id: get_tag
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)    
     
     - name: Build
-      run: php laradock-cli app:build --build-version=${{ steps.get_tag.outputs.VERSION }}
-
+      run: php laradock-cli app:build --build-version=${{ steps.get_tag.outputs.VERSION }}      
+      
     - uses: AButler/upload-release-assets@v2.0
       with:
-        files: '/home/runner/work/laradock-cli/laradock-cli/builds/laradock-cli'
+        files: ./builds/laradock-cli
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         release-tag: ${GITHUB_REF}
