@@ -1,6 +1,5 @@
 <?php namespace Eppak\Services;
 
-
 use Eppak\Contracts\Runnable;
 use Eppak\Exceptions\PathNotFoundException;
 use Eppak\Runner\Runner;
