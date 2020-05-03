@@ -8,6 +8,5 @@
 
 interface Runnable
 {
-
     public function error(): ?string;
 }

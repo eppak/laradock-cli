@@ -37,7 +37,7 @@ trait Runner
         }
 
         if (!Str::endsWith($path, '/')) {
-            //$path = "{$path}/";
+            // $path = "{$path}/";
         }
 
         return $path;

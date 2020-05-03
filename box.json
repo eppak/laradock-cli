@@ -5,7 +5,7 @@
         "bootstrap",
         "config",
         "vendor",
-	"src"
+        "src"
     ],
     "files": [
         "composer.json"

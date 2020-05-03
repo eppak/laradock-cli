@@ -1,10 +1,7 @@
 <?php namespace Eppak\Commands;
 
-use Eppak\Exceptions\PathNotFoundException;
-use Eppak\Services\Configuration;
 use Eppak\Services\Docker;
 use Illuminate\Console\Command;
-use Eppak\Runner\Runner as Run;
 
 class CheckCommand extends Command
 {
