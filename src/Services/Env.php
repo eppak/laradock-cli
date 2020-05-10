@@ -54,7 +54,7 @@ class Env implements Runnable
             return true;
 
         } catch (\Exception $e) {
-            $this->error = $e->getMessage();
+           $this->error = $e->getMessage();
 
             return false;
         }

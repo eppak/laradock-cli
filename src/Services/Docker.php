@@ -1,10 +1,9 @@
 <?php namespace Eppak\Services;
 
-
 use Eppak\Contracts\Runnable;
 use Eppak\Exceptions\FileNotFoundException;
 use Eppak\Exceptions\PathNotFoundException;
-use Eppak\Runner\Runner;
+use Eppak\Contracts\Runner;
 use Illuminate\Support\Facades\File;
 
 /**
@@ -125,6 +124,7 @@ class Docker implements Runnable
 
     private function exists($name): bool {
         foreach ($this->expected as $item) {
+
             if("\"{$this->configuration->name()}{$item}\"" == $name) {
                 return true;
             }

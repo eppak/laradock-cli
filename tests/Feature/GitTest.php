@@ -1,53 +1,47 @@
-<?php
+<?php namespace Tests\Feature;
 
-namespace Tests\Feature;
-
-use Eppak\Contracts\Runner;
-use Eppak\Contracts\RunnerResult;
+use Eppak\Exceptions\PathNotFoundException;
 use Eppak\Services\Configuration;
 use Eppak\Services\Git;
-use Illuminate\Support\Facades\File;
-use Mockery;
+use Tests\Stub\FileStub;
+use Tests\Stub\ResultStub;
+use Tests\Stub\RunnerStub;
 use Tests\TestCase;
 
 class GitTest extends TestCase
 {
+    /**
+     * @throws PathNotFoundException
+     */
     public function testGitCloneOk()
     {
         $config = new Configuration();
+        $file = new FileStub($config);
 
-        File::shouldReceive('exists')->with('somefolder')->andReturn('true');
-        File::shouldReceive('exists')->with("somefolder/{$config->folder()}")->andReturn('true');
+        $file->path('somefolder', true);
 
-        $result = $mock = Mockery::mock(RunnerResult::class);
-        $result->shouldReceive('success')->andReturn(true);
-
-        $runner = $mock = Mockery::mock(Runner::class);
-        $runner->shouldReceive('run')->andReturn($result);
-        $runner->shouldReceive('from')->with('somefolder')->andReturn($runner);
+        $result = ResultStub::make(true);
+        $runner = RunnerStub::make($result, 'somefolder');
 
         $git = new Git($runner, $config);
         $this->assertTrue($git->clone('somefolder'));
     }
 
+    /**
+     * @throws PathNotFoundException
+     */
     public function testGitCloneKo()
     {
         $config = new Configuration();
 
-        File::shouldReceive('exists')->with('somefolder')->andReturn('true');
-        File::shouldReceive('exists')->with("somefolder/{$config->folder()}")->andReturn('true');
+        $file = new FileStub($config);
+        $file->path('somefolder', true);
 
-        $result = $mock = Mockery::mock(RunnerResult::class);
-        $result->shouldReceive('success')->andReturn(false);
-        $result->shouldReceive('error')->andReturn('Some Error');
-        $result->shouldReceive('code')->andReturn('127');
-
-        $runner = $mock = Mockery::mock(Runner::class);
-        $runner->shouldReceive('from')->with('somefolder')->andReturn($runner);
-        $runner->shouldReceive('run')->andReturn($result);
+        $result = ResultStub::error();
+        $runner = RunnerStub::make($result, 'somefolder');
 
         $git = new Git($runner, $config);
         $this->assertFalse($git->clone('somefolder'));
-        $this->assertEquals($git->error(), '[127] Some Error');
+        $this->assertEquals('[127] Some Error', $git->error());
     }
 }
