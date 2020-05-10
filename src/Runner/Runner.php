@@ -1,11 +1,12 @@
 <?php namespace Eppak\Runner;
 
-use Eppak\Exceptions\PathNotFoundException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 use Eppak\Contracts\RunnerResult;
 use Eppak\Contracts\Runner as RunnerInterface;
+use Eppak\Exceptions\PathNotFoundException;
 
 /**
  * (c) Alessandro Cappellozza <alessandro.cappellozza@gmail.com>
@@ -95,6 +96,12 @@ class Runner implements RunnerInterface
      */
     private function response(bool $status, Process $process): Response
     {
+        if (!$status) {
+            Log::debug("Error stdout: {$process->getOutput()}");
+            Log::debug("Error code: {$process->getExitCode()}");
+            Log::debug("Error: {$process->getErrorOutput()}");
+        }
+
         return new Response(
             $status,
             $process->getOutput(),

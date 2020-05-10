@@ -46,6 +46,12 @@ class WorkspaceCommand extends Command
         $path = $this->path();
         $folder = "{$path}/{$configuration->folder()}";
 
+        if (!sudo()) {
+            $this->warn('Command need administrative privilege (root or sudo)');
+
+            return 1;
+        }
+
         $runner->tty()->timeout(null)->from($folder)->run([
             'docker-compose',
             'exec',

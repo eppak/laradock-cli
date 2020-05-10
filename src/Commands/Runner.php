@@ -1,5 +1,6 @@
 <?php namespace Eppak\Commands;
 
+use Illuminate\Support\Facades\Log;
 use Eppak\Contracts\Runnable;
 use Illuminate\Support\Str;
 
@@ -15,13 +16,18 @@ trait Runner
      * @param string $title
      * @param Runnable $runner
      * @param $function
+     * @param bool $error
      * @return bool
      */
-    private function runTask(string $title, Runnable $runner, $function): bool
+    private function runTask(string $title, Runnable $runner, $function, bool $error = true): bool
     {
+        Log::info($title);
+
         $done = $this->task($title, $function);
 
-        if (!$done) {
+        if (!$done && $error) {
+            Log::error($runner->error());
+
             $this->error($runner->error());
         }
 
@@ -37,8 +43,10 @@ trait Runner
         }
 
         if (!Str::endsWith($path, '/')) {
-            // $path = "{$path}/";
+            $path = rtrim($path, '/');
         }
+
+        Log::notice("Running on path: {$path}");
 
         return $path;
     }

@@ -38,9 +38,15 @@ class CheckCommand extends Command
      */
     public function handle(Docker $docker)
     {
+        if (!sudo()) {
+            $this->warn('Command need administrative privilege (root or sudo)');
+
+            return 1;
+        }
+
         $this->runTask("Docker process...", $docker, function () use ($docker)  {
             return $docker->ps();
-        });
+        }, false);
 
         $this->table(['Name', 'Status'], $docker->status());
 

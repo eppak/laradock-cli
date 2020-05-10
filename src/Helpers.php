@@ -1,6 +1,6 @@
 <?php
 
-function userHome($path = null)
+function userHome($path = null): string
 {
     $user = posix_getpwuid(posix_getuid());
 
@@ -9,4 +9,9 @@ function userHome($path = null)
     }
 
     return "{$user['dir']}/{$path}";
+}
+
+function sudo(): bool
+{
+    return (posix_getuid() == 0);
 }

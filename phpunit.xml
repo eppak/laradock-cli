@@ -21,4 +21,8 @@
             <directory suffix=".php">./app</directory>
         </whitelist>
     </filter>
+
+    <php>
+        <server name="DISABLE_CONFIG" value="true"/>
+    </php>
 </phpunit>

@@ -41,6 +41,12 @@ class StartCommand extends Command
     {
         $path = $this->path();
 
+        if (!sudo()) {
+            $this->warn('Command need administrative privilege (root or sudo)');
+
+            return 1;
+        }
+
         $this->runTask("Starting Docker...", $docker, function () use ($docker, $path) {
             return $docker->start($path);
         });
