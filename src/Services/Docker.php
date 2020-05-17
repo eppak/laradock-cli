@@ -5,6 +5,7 @@ use Eppak\Exceptions\FileNotFoundException;
 use Eppak\Exceptions\PathNotFoundException;
 use Eppak\Contracts\Runner;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 /**
  * (c) Alessandro Cappellozza <alessandro.cappellozza@gmail.com>
@@ -124,8 +125,9 @@ class Docker implements Runnable
 
     private function exists($name): bool {
         foreach ($this->expected as $item) {
+            $expected =  Str::lower("\"{$this->configuration->name()}{$item}\"");
 
-            if("\"{$this->configuration->name()}{$item}\"" == $name) {
+            if($expected == Str::lower($name)) {
                 return true;
             }
         }
