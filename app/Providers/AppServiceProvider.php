@@ -25,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         app()->bind(Runner::class, function() {
             return new RunService();
         });
