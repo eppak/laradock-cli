@@ -1,8 +1,10 @@
 <?php namespace Eppak\Commands;
 
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Eppak\Contracts\Runnable;
 use Illuminate\Support\Str;
+use Monolog\Registry as Monolog;
 
 /**
  * (c) Alessandro Cappellozza <alessandro.cappellozza@gmail.com>
@@ -23,15 +25,23 @@ trait Runner
     {
         Log::info($title);
 
-        $done = $this->task($title, $function);
+        try {
+            $done = $this->task($title, $function);
 
-        if (!$done && $error) {
-            Log::error($runner->error());
+            if (!$done && $error) {
+                Log::error($runner->error());
 
-            $this->error($runner->error());
+                $this->log();
+            }
+
+            return $done;
+
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $this->log();
         }
 
-        return $done;
+        return false;
     }
 
     private function path()
@@ -49,5 +59,13 @@ trait Runner
         Log::notice("Running on path: {$path}");
 
         return $path;
+    }
+
+    private function log()
+    {
+        $log = app('log');
+        $logfile = $log->driver()->getHandlers()[0]->getUrl();
+
+        $this->warn("You can see detailed log in {$logfile}");
     }
 }
